@@ -24,3 +24,24 @@ export async function createPostAction({
   });
   revalidatePath(revalidationPath);
 }
+
+export async function createCommentAction({
+  postId,
+  content,
+  authorId,
+  parentId,
+}: {
+  postId: string;
+  content: string;
+  authorId: string;
+  parentId?: string;
+}) {
+  await prisma.comment.create({
+    data: {
+      content,
+      authorId,
+      postId,
+      parentId,
+    },
+  });
+}
