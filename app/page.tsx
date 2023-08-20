@@ -1,5 +1,6 @@
 import { prisma } from "@/db";
 import { CreatePost } from "@/app/CreatePost";
+import { Post } from "@/components/Post";
 import { currentUser } from "@clerk/nextjs";
 
 export default async function Home() {
@@ -10,9 +11,7 @@ export default async function Home() {
     <main>
       {user && <CreatePost userId={user.id} />}
       {posts.map((post) => (
-        <div key={post.id}>
-          <div>{post.content}</div>
-        </div>
+        <Post key={post.id} post={post} />
       ))}
     </main>
   );
