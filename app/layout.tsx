@@ -2,6 +2,7 @@ import { ClerkProvider, UserButton } from "@clerk/nextjs";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Link from "next/link";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,7 +21,9 @@ export default function RootLayout({
       <html lang="en" style={{ colorScheme: "dark light" }}>
         <body className={inter.className}>
           <header className="flex items-center justify-between">
-            <h1>Dannit</h1>
+            <Link href="/">
+              <h1>Dannit</h1>
+            </Link>
             <div className="flex items-center">
               <nav>
                 <a href="/">Home</a>
