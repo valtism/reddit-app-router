@@ -1,12 +1,13 @@
 import { CommentForm } from "@/components/CommentForm";
 import { Post } from "@/components/Post";
+import { ServerComment } from "@/components/ServerComment";
 import { prisma } from "@/db";
 import { currentUser } from "@clerk/nextjs";
 import { unstable_cache } from "next/cache";
 import { notFound } from "next/navigation";
 
 export default async function Page({ params }: { params: { id: string } }) {
-  const postId = params.id
+  const postId = params.id;
   const user = await currentUser();
   const post = await prisma.post.findUnique({
     where: { id: postId },
@@ -16,6 +17,12 @@ export default async function Page({ params }: { params: { id: string } }) {
       return prisma.comment.findMany({
         where: {
           postId: postId,
+          parentId: null,
+        },
+        include: {
+          children: {
+            select: { id: true },
+          },
         },
       });
     },
@@ -32,7 +39,11 @@ export default async function Page({ params }: { params: { id: string } }) {
       <Post post={post} />
       {user && <CommentForm postId={params.id} authorId={user.id} />}
       {comments.map((comment) => (
-        <div key={comment.id}>{comment.content}</div>
+        <ServerComment
+          key={comment.id}
+          commentId={comment.id}
+          postId={postId}
+        ></ServerComment>
       ))}
     </div>
   );
